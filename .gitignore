@@ -44,3 +44,6 @@ Thumbs.db
 # Docker
 *.log
 
+
+/node_modules
+/presentation.slides.html
