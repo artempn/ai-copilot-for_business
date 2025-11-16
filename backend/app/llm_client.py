@@ -194,24 +194,20 @@ class LLMClient:
     ) -> str:
         """Generate response from LLM"""
         try:
-            # Prepare messages for Ollama API
             ollama_messages = []
             
-            # Add system prompt as first message
             if system_prompt:
                 ollama_messages.append({
                     "role": "system",
                     "content": system_prompt
                 })
             
-            # Add conversation messages
             for msg in messages:
                 ollama_messages.append({
                     "role": msg.get("role", "user"),
                     "content": msg.get("content", "")
                 })
             
-            # Call Ollama API
             url = f"{self.base_url}/api/chat"
             payload = {
                 "model": self.model,
@@ -251,6 +247,5 @@ class LLMClient:
         await self.client.aclose()
 
 
-# Global LLM client instance
 llm_client = LLMClient()
 

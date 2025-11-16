@@ -1,4 +1,3 @@
-// Sidebar component for mode selection
 // Author: Погосян Артем Артурович (Pogosian Artem)
 // VK: https://vk.com/iamartempn
 

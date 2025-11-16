@@ -1,4 +1,3 @@
-// Main App component
 // Author: Погосян Артем Артурович (Pogosian Artem)
 // VK: https://vk.com/iamartempn
 

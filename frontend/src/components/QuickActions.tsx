@@ -1,4 +1,3 @@
-// Quick Actions component
 // Author: Погосян Артем Артурович (Pogosian Artem)
 // VK: https://vk.com/iamartempn
 
@@ -182,7 +181,6 @@ const QuickActions = ({ onActionComplete: _onActionComplete }: QuickActionsProps
   )
 }
 
-// Modal components
 interface ModalProps {
   onClose: () => void
   onSubmit: (data: any) => void

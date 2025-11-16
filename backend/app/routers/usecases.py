@@ -21,7 +21,6 @@ router = APIRouter(prefix="/api/usecases", tags=["usecases"])
 async def legal_contract(request: LegalContractRequest):
     """Generate legal contract draft"""
     try:
-        # Build prompt for contract generation
         prompt = f"""Составь черновик договора типа "{request.contract_type}".
 
 Стороны: {request.parties}
@@ -88,7 +87,6 @@ async def marketing_post(request: MarketingPostRequest):
             mode="marketing"
         )
         
-        # Parse response into separate posts (simple split by numbered items or "---")
         posts = []
         lines = response_text.split('\n')
         current_post = []
@@ -101,12 +99,10 @@ async def marketing_post(request: MarketingPostRequest):
                     current_post = []
                 continue
             
-            # Check if it's a new post marker (number, "---", "Вариант", etc.)
             if line.startswith(('1.', '2.', '3.', '4.', '5.', 'Вариант', '---', '===')):
                 if current_post:
                     posts.append('\n'.join(current_post))
                     current_post = []
-                # Skip the marker line or include it
                 if not line.startswith('---'):
                     current_post.append(line)
             else:
@@ -115,11 +111,10 @@ async def marketing_post(request: MarketingPostRequest):
         if current_post:
             posts.append('\n'.join(current_post))
         
-        # If parsing failed, return the whole response as one post
         if not posts:
             posts = [response_text]
         
-        return MarketingPostResponse(posts=posts[:5])  # Limit to 5 posts
+        return MarketingPostResponse(posts=posts[:5])
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating post: {str(e)}")
@@ -129,7 +124,6 @@ async def marketing_post(request: MarketingPostRequest):
 async def finance_report(request: FinanceReportRequest):
     """Generate finance report and analysis"""
     try:
-        # Build data description
         data_desc = []
         if request.sales_data:
             data_desc.append(f"Данные по продажам: {request.sales_data}")
@@ -160,7 +154,6 @@ async def finance_report(request: FinanceReportRequest):
             mode="finance"
         )
         
-        # Extract recommendations (simple parsing)
         recommendations = []
         warnings = []
         
@@ -183,7 +176,6 @@ async def finance_report(request: FinanceReportRequest):
                 elif in_warnings:
                     warnings.append(line.strip().lstrip('- •0123456789. '))
         
-        # Default warnings
         if not warnings:
             warnings = [
                 "Это общие рекомендации. Для серьёзных финансовых решений обратитесь к финансовому консультанту.",
@@ -226,7 +218,6 @@ async def summary(request: SummaryRequest):
             mode="summary"
         )
         
-        # Extract tasks and next steps (simple parsing)
         tasks = []
         next_steps = []
         
@@ -297,7 +288,6 @@ async def company_card(request: CompanyCardRequest):
             mode="company"
         )
         
-        # Extract recommendations
         recommendations = []
         lines = card_text.split('\n')
         in_recommendations = False
@@ -357,7 +347,6 @@ async def tax_consultation(request: TaxConsultationRequest):
             mode="taxes"
         )
         
-        # Extract calculations if present
         calculations = None
         warnings = [
             "⚠️ Это общая информация. Для точных расчётов обратитесь к бухгалтеру или налоговому консультанту.",

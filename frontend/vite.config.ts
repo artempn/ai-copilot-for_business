@@ -1,4 +1,3 @@
-// Vite configuration
 // Author: Погосян Артем Артурович (Pogosian Artem)
 // VK: https://vk.com/iamartempn
 

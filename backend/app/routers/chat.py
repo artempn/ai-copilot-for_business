@@ -23,7 +23,6 @@ async def chat(
 ):
     """Main chat endpoint"""
     try:
-        # Get or create conversation
         if request.conversation_id:
             conversation = db.query(Conversation).filter(
                 Conversation.id == request.conversation_id
@@ -36,7 +35,6 @@ async def chat(
             db.commit()
             db.refresh(conversation)
         
-        # Save user message
         if settings.SAVE_HISTORY:
             user_message = Message(
                 conversation_id=conversation.id,
@@ -48,7 +46,6 @@ async def chat(
             db.add(user_message)
             db.commit()
         
-        # Get conversation history
         if settings.SAVE_HISTORY:
             previous_messages = db.query(Message).filter(
                 Message.conversation_id == conversation.id
@@ -61,17 +58,14 @@ async def chat(
         else:
             messages_for_llm = [{"role": "user", "content": request.message}]
         
-        # Get system prompt based on mode
         system_prompt = llm_client._get_system_prompt(request.mode)
         
-        # Generate response from LLM
         answer = await llm_client.generate_response(
             system_prompt=system_prompt,
             messages=messages_for_llm,
             mode=request.mode
         )
         
-        # Save assistant message
         if settings.SAVE_HISTORY:
             assistant_message = Message(
                 conversation_id=conversation.id,
@@ -83,7 +77,6 @@ async def chat(
             db.add(assistant_message)
             db.commit()
             
-            # Get all messages for response
             all_messages = db.query(Message).filter(
                 Message.conversation_id == conversation.id
             ).order_by(Message.created_at).all()
